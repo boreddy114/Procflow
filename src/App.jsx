@@ -58,12 +58,16 @@ export default function App() {
     }
 
     let savedKey = localStorage.getItem('openai_api_key');
+    const envKey = import.meta.env.VITE_OPENAI_API_KEY || '';
+    
+    // Always prioritize the environment variable if it changes or is newly set
+    if (envKey && envKey !== savedKey) {
+      savedKey = envKey;
+      localStorage.setItem('openai_api_key', envKey);
+    }
+    
     if (!savedKey) {
-      // Load from Vite environment variable (preloaded locally via .env or on Vercel via dashboard settings)
-      savedKey = import.meta.env.VITE_OPENAI_API_KEY || '';
-      if (savedKey) {
-        localStorage.setItem('openai_api_key', savedKey);
-      }
+      savedKey = '';
     }
     setOpenaiApiKey(savedKey);
   }, []);
