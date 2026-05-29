@@ -421,7 +421,7 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
                 HIPAA-Compliant Intelligent Timetable Normalizer
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', fontSize: '0.85rem' }}>
+              <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', fontSize: '0.85rem' }}>
                 <div>
                   <h4 style={{ margin: '0 0 0.35rem 0', color: '#10b981', fontWeight: '600' }}>What is ProcFlow?</h4>
                   <p className="about-section-desc">
@@ -994,7 +994,7 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
               HIPAA-Compliant Intelligent Timetable Normalizer
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', fontSize: '0.85rem' }}>
+            <div className="modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', fontSize: '0.85rem' }}>
               <div>
                 <h4 style={{ margin: '0 0 0.35rem 0', color: '#10b981', fontWeight: '600' }}>What is ProcFlow?</h4>
                 <p className="about-section-desc">
