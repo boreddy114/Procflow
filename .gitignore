@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production Build
+dist/
+build/
+
+# Debug and Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+eslint-formatter-dryrun.js
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor Configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# HIPAA Sensitive Patient Data (DO NOT COMMIT)
+*.csv
+*.xlsx
+*.pdf
+*.txt
+timetable_page.png
+timetable_page_rotated.png
+logo_temp.png
+logo_left.png
