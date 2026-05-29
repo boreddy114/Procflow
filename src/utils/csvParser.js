@@ -135,6 +135,7 @@ export function parseDemographicsCSV(csvText) {
               insurance,
               facility,
               apptType,
+              medCount: '',
               isProcedure, // Used for default filtering/toggling
               originalRow: row // Preserve full data in case needed
             };

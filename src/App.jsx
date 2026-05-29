@@ -277,6 +277,7 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
       insurance: 'MC',
       facility: 'HI',
       apptType: 'FLUORO-S',
+      medCount: '',
       isProcedure: true
     };
     setRows(prev => [...prev, newRow]);
@@ -300,6 +301,7 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
       (row.lastName || '').toLowerCase().includes(query) ||
       (row.patNo || '').toLowerCase().includes(query) ||
       (row.reason || '').toLowerCase().includes(query) ||
+      (row.medCount || '').toLowerCase().includes(query) ||
       (row.insurance || '').toLowerCase().includes(query) ||
       (row.facility || '').toLowerCase().includes(query)
     );
@@ -730,6 +732,13 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
                       Reason / Procedure <span className="tooltip-icon">ⓘ</span>
                     </th>
                     <th 
+                      style={{ width: '135px' }}
+                      onMouseEnter={(e) => showTooltip(e, "Medical Assistant Med Count note.")}
+                      onMouseLeave={hideTooltip}
+                    >
+                      Med Count <span className="tooltip-icon">ⓘ</span>
+                    </th>
+                    <th 
                       style={{ width: '115px' }}
                       onMouseEnter={(e) => showTooltip(e, "Normalized Insurance Provider Code (MC, UMC, CIGNA, UMR, etc.).")}
                       onMouseLeave={hideTooltip}
@@ -820,6 +829,18 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
                         />
                       </td>
 
+                      {/* Med Count */}
+                      <td>
+                        <input
+                          type="text"
+                          value={row.medCount}
+                          onChange={(e) => handleCellChange(row.id, 'medCount', e.target.value)}
+                          className="cell-input"
+                          placeholder="Empty..."
+                          style={{ fontWeight: '500' }}
+                        />
+                      </td>
+
                       {/* Ins */}
                       <td>
                         <select
@@ -896,21 +917,23 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
             {rows.filter(r => r.isProcedure).map((row) => (
               <tr key={row.id}>
                 {/* 1. Birthdate */}
-                <td style={{ width: '12%' }}>{row.birthdate}</td>
+                <td style={{ width: '10%' }}>{row.birthdate}</td>
                 {/* 2. Pat # */}
-                <td style={{ width: '10%' }}>{row.patNo}</td>
+                <td style={{ width: '8%' }}>{row.patNo}</td>
                 {/* 3. First Name */}
-                <td style={{ width: '12%' }}>{row.firstName}</td>
+                <td style={{ width: '10%' }}>{row.firstName}</td>
                 {/* 4. Last Name */}
-                <td style={{ width: '15%' }}>{row.lastName}</td>
+                <td style={{ width: '12%' }}>{row.lastName}</td>
                 {/* 5. Time */}
-                <td style={{ width: '10%' }}>{row.time}</td>
+                <td style={{ width: '8%' }}>{row.time}</td>
                 {/* 6. Reason */}
                 <td className="reason-cell">{row.reason}</td>
-                {/* 7. Insurance Code */}
-                <td className="abbr-cell" style={{ width: '8%' }}>{row.insurance}</td>
-                {/* 8. Facility Code */}
-                <td className="abbr-cell" style={{ width: '8%' }}>{row.facility}</td>
+                {/* 7. Med Count */}
+                <td style={{ width: '10%' }}>{row.medCount}</td>
+                {/* 8. Insurance Code */}
+                <td className="abbr-cell" style={{ width: '7%' }}>{row.insurance}</td>
+                {/* 9. Facility Code */}
+                <td className="abbr-cell" style={{ width: '7%' }}>{row.facility}</td>
               </tr>
             ))}
           </tbody>
