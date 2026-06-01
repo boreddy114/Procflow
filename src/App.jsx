@@ -11,6 +11,7 @@ import {
   Eye, 
   EyeOff,
   AlertCircle,
+  AlertTriangle,
   Search,
   Sun,
   Moon,
@@ -246,6 +247,9 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
   const handleCellChange = (id, field, value) => {
     setRows(prevRows => prevRows.map(row => {
       if (row.id === id) {
+        if (field === 'facility') {
+          return { ...row, [field]: value, facilityReason: "Manual override" };
+        }
         return { ...row, [field]: value };
       }
       return row;
@@ -276,6 +280,7 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
       reason: '',
       insurance: 'MC',
       facility: 'HI',
+      facilityReason: 'Manually created row',
       apptType: 'FLUORO-S',
       medCount: '',
       isProcedure: true
@@ -606,6 +611,27 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
         ) : (
           /* Main Interactive Table Shell */
           <div className="grid-container">
+            {/* Verification Warning Alert Banner */}
+            <div className="verification-alert" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: '0.85rem 1.25rem',
+              background: 'rgba(245, 158, 11, 0.1)',
+              border: '1px solid rgba(245, 158, 11, 0.25)',
+              borderRadius: '10px',
+              marginBottom: '1rem',
+              color: '#fbbf24',
+              fontSize: '0.85rem',
+              fontWeight: '500',
+              lineHeight: '1.4'
+            }}>
+              <AlertTriangle style={{ width: '18px', height: '18px', flexShrink: 0 }} />
+              <div style={{ flex: 1 }}>
+                <strong>Verification Notice:</strong> Facility and Insurance values are automatically inferred from the CSV. Please review and verify each row's selections for accuracy before printing.
+              </div>
+            </div>
+
             {/* Table Action Controls - Single Search Input */}
             <div className="toolbar">
               <div className="toolbar-left" style={{ flex: 1, maxWidth: '500px' }}>
@@ -732,11 +758,11 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
                       Reason / Procedure <span className="tooltip-icon">ⓘ</span>
                     </th>
                     <th 
-                      style={{ width: '135px' }}
-                      onMouseEnter={(e) => showTooltip(e, "Medical Assistant Med Count note.")}
+                      style={{ width: '150px' }}
+                      onMouseEnter={(e) => showTooltip(e, "Medical Assistant Med Count or clinic notes.")}
                       onMouseLeave={hideTooltip}
                     >
-                      Med Count <span className="tooltip-icon">ⓘ</span>
+                      Med Count / Notes <span className="tooltip-icon">ⓘ</span>
                     </th>
                     <th 
                       style={{ width: '115px' }}
@@ -860,7 +886,10 @@ Return only a JSON object containing a "cleaned" field with an array of strings 
                       </td>
 
                       {/* Facility */}
-                      <td>
+                      <td
+                        onMouseEnter={(e) => showTooltip(e, row.facilityReason || "Facility location selection")}
+                        onMouseLeave={hideTooltip}
+                      >
                         <select
                           value={row.facility}
                           onChange={(e) => handleCellChange(row.id, 'facility', e.target.value)}

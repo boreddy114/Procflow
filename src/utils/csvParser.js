@@ -37,30 +37,37 @@ export function normalizeInsurance(insuranceName) {
  * Guesses default facility based on insurance and reason
  */
 export function guessFacility(insuranceAbbr, reason) {
+  return guessFacilityWithReason(insuranceAbbr, reason).facility;
+}
+
+/**
+ * Guesses default facility and explains the detection logic
+ */
+export function guessFacilityWithReason(insuranceAbbr, reason) {
   const normalizedIns = (insuranceAbbr || '').toUpperCase();
   const normalizedReason = (reason || '').toUpperCase();
   
   // If reason mentions certain keywords, guess accordingly
   if (normalizedReason.includes('AMBRA') || normalizedReason.includes('CLOUD')) {
-    return 'AMBRA';
+    return { facility: 'AMBRA', reason: "Detection: Matched keyword 'AMBRA'/'CLOUD' in Reason" };
   }
   if (normalizedReason.includes('BCH') || normalizedReason.includes('BOULDER')) {
-    return 'BCH';
+    return { facility: 'BCH', reason: "Detection: Matched keyword 'BCH'/'BOULDER' in Reason" };
   }
   if (normalizedReason.includes('HI') || normalizedReason.includes('HEALTH IMAGES')) {
-    return 'HI';
+    return { facility: 'HI', reason: "Detection: Matched keyword 'HI'/'HEALTH IMAGES' in Reason" };
   }
 
   // Based on the provided TIMETABLE.pdf distribution:
   // - UMC (United) frequently goes to Health Images (HI) or AMBRA
   // - MC (Medicare) goes to BCH (Boulder Community Health), HI (Health Images), or AMBRA
   // Let's provide a balanced default:
-  if (normalizedIns === 'UMC') return 'HI';
-  if (normalizedIns === 'MC') return 'BCH';
-  if (normalizedIns === 'CIGNA') return 'BCH';
-  if (normalizedIns === 'UMR') return 'HI';
+  if (normalizedIns === 'UMC') return { facility: 'HI', reason: "Detection: Guessed from insurance 'UMC'" };
+  if (normalizedIns === 'MC') return { facility: 'BCH', reason: "Detection: Guessed from insurance 'MC'" };
+  if (normalizedIns === 'CIGNA') return { facility: 'BCH', reason: "Detection: Guessed from insurance 'CIGNA'" };
+  if (normalizedIns === 'UMR') return { facility: 'HI', reason: "Detection: Guessed from insurance 'UMR'" };
   
-  return 'HI'; // default fallback
+  return { facility: 'HI', reason: "Detection: Default fallback facility" };
 }
 
 /**
@@ -119,7 +126,7 @@ export function parseDemographicsCSV(csvText) {
             
             const insurance = normalizeInsurance(rawInsurance);
             const reason = cleanReason(rawReason);
-            const facility = guessFacility(insurance, reason);
+            const { facility, reason: facilityReason } = guessFacilityWithReason(insurance, reason);
             
             // Default to including all appointments in the timetable
             const isProcedure = true;
@@ -134,6 +141,7 @@ export function parseDemographicsCSV(csvText) {
               reason,
               insurance,
               facility,
+              facilityReason,
               apptType,
               medCount: '',
               isProcedure, // Used for default filtering/toggling
